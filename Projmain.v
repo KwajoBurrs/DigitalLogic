@@ -14,9 +14,19 @@ module ProjMain(
 
 
 //start seven segment driver
+
+//H = H1
+//I = H2
+//J = H3
+//K = H4
+//L = H5
+//M = H6
+
+
+
 	reg [6:0] z;
 	assign h = ~z;
-always@(*)
+/*always@(*)
 begin
 
 
@@ -27,9 +37,11 @@ begin
 		2'b10 : DDD = 2'b10
 		2'b11 : DDD = 2'b11
 	endcase
+ 
 end
-
-always@(DDD[0])
+*/
+always@(~DD , ~D)
+//always@(DDD[0])
 begin
 			
 	case (A)
@@ -87,8 +99,8 @@ begin
 	8'bx1xxxxxx : x2 = 1'b0;
 	8'b1xxxxxxx : x2 = 1'b0;
 	end
-		
-always@(DDD[1])
+always@(~DD, D)		
+//always@(DDD[1])
 begin
 			
 	case (A)
@@ -148,8 +160,8 @@ begin
 
 end
 
-
-always@(DDD[2])
+always@(DD, ~D)
+//always@(DDD[2])
 begin
 			
 	case (A)
@@ -211,11 +223,11 @@ begin
 end
 
 //final case that determines if the state should reflect an unlock or wrong input 
-
-always@(DDD[3])
+always@(DD , D)
+//always@(DDD[3])
 begin
 	//determination if the inputs in state 1-3 were correct
-	casex (x)
+	casex ({x2,x1,x0})
 
 	3'b111 : zzz = 7'h
 
@@ -294,7 +306,7 @@ end
 
 	//determines the total value of inputs to decide if "0,0" was entered
 wire [4:0] InputSum;
-assign InputSum = X + Y;
+assign InputSum = A + B;
 	//state D determinant
 wire [2:0] Doutput;
 assign Doutput[2] = x2;
@@ -302,18 +314,20 @@ assign Doutput[1] = x1;
 assign Doutput[0] = x0;
 
 wire C;
-wire [1:0] D; //D0 in state machine
-wire [1:0] DD; //D1 in state machine
+wire  D; //D0 in state machine
+wire  DD; //D1 in state machine
 wire [0:3] DDD; // state machine state
+wire Q;
+wire QQ;
+wire Qnot;
+wire QQnot;
+wire O;
+wire P;
 
+		always @(posedge clock)
+		begin
 
-
-
-always @(posedge clock)
-
-//deciding input of state machine based on values input to machine "0,0" resets else continue
-	
-	casex ({InputSum})
+		casex ({InputSum})
 		5'b00000 : C = 1'b0;
 		5'bxxxx1 : C = 1'b1;
 		5'bxxx1x : C = 1'b1;
@@ -321,7 +335,39 @@ always @(posedge clock)
 		5'bx1xxx : C = 1'b1;
 		5'b1xxxx : C = 1'b1;
 		default : C = 1'b0;
+		endcase
+			
+			Q <= D;//D0
+			QQ <= DD;//D1
+			Qnot <= ~Q;
+			QQnot <= ~QQ;
+
+			and(D,Qnot,C)
+			//o and p are the state machine D1 or gate inputs
+			//
+			or(DD,O,P)
+			and(O,C,Qnot,QQ)
+			and(P,QQnot,C,Q)
+			
+		end
+
+
+
+/*always @(posedge clock)
+
+//deciding input of state machine based on values input to machine "0,0" resets else continue
+	
+	casex ({InputSum})
+//		5'b00000 : C = 1'b0;
+//		5'bxxxx1 : C = 1'b1;
+//		5'bxxx1x : C = 1'b1;
+//		5'bxx1xx : C = 1'b1;
+//		5'bx1xxx : C = 1'b1;
+//		5'b1xxxx : C = 1'b1;
+		default : C = 1'b0;
 	endcase
+*/
+		
 //input storage based on state of state machine [A-D] / [0:3] 
 	
 
