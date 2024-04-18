@@ -106,6 +106,44 @@ begin
 	end 
 	if(count == 8'd1)
 	begin
+		case (A)//seven segment display 3
+		4'h0  : J = 7'h3F;
+   		4'h1  : J = 7'h06;
+		4'h2  : J = 7'h5B;
+		4'h3  : J = 7'h4F;
+		4'h4  : J = 7'h66;
+		4'h5  : J = 7'h6D;
+		4'h6  : J = 7'h7D;
+		4'h7  : J = 7'h07;
+		4'h8  : J = 7'h7F;
+		4'h9  : J = 7'h67;
+		4'hA  : J = 7'h77;
+		4'hB  : J = 7'h7C;
+		4'hC  : J = 7'h39;
+		4'hD  : J = 7'h5E;
+		4'hE  : J = 7'h79;
+		4'hF  : J = 7'h71;
+		default : J = 7'h00;
+		endcase
+		case (B)//seven segment display 4
+		4'h0  : K = 7'h3F;
+   		4'h1  : K = 7'h06;
+		4'h2  : K = 7'h5B;
+		4'h3  : K = 7'h4F;
+		4'h4  : K = 7'h66;
+		4'h5  : K = 7'h6D;
+		4'h6  : K = 7'h7D;
+		4'h7  : K = 7'h07;
+		4'h8  : K = 7'h7F;
+		4'h9  : K = 7'h67;
+		4'hA  : K = 7'h77;
+		4'hB  : K = 7'h7C;
+		4'hC  : K = 7'h39;
+		4'hD  : K = 7'h5E;
+		4'hE  : K = 7'h79;
+		4'hF  : K = 7'h71;
+		default : K = 7'h00;
+		endcase
 		casex ({A,B})
 		8'b00011001 : x1 = 1'b1; //"19"
 		8'bxxxxxxx0 : x1 = 1'b0;
@@ -120,6 +158,43 @@ begin
 	end
 	if(count == 8'd2)
 	begin
+		case (A)//seven segment display 3
+		4'h0  : L = 7'h3F;
+   		4'h1  : L = 7'h06;
+		4'h2  : L = 7'h5B;
+		4'h3  : L = 7'h4F;
+		4'h4  : L = 7'h66;
+		4'h5  : L = 7'h6D;
+		4'h6  : L = 7'h7D;
+		4'h7  : L = 7'h07;
+		4'h8  : L = 7'h7F;
+		4'h9  : L = 7'h67;
+		4'hA  : L = 7'h77;
+		4'hB  : L = 7'h7C;
+		4'hC  : L = 7'h39;
+		4'hD  : L = 7'h5E;
+		4'hE  : L = 7'h79;
+		4'hF  : L = 7'h71;
+		default : L = 7'h00;
+		endcase
+		case (B)//seven segment display 4
+		4'h0  : M = 7'h3F;
+   		4'h1  : M = 7'h06;
+		4'h2  : M = 7'h5B;
+		4'h3  : M = 7'h4F;
+		4'h4  : M = 7'h66;
+		4'h5  : M = 7'h6D;
+		4'h6  : M = 7'h7D;
+		4'h7  : M = 7'h07;
+		4'h8  : M = 7'h7F;
+		4'h9  : M = 7'h67;
+		4'hA  : M = 7'h77;
+		4'hB  : M = 7'h7C;
+		4'hC  : M = 7'h39;
+		4'hD  : M = 7'h5E;
+		4'hE  : M = 7'h79;
+		4'hF  : M = 7'h71;
+		default : M = 7'h00
 		casex ({A,B})
 		8'b10010110 : x0 = 1'b1; //"96"
 		8'bxxxxxxx1 : x0 = 1'b0;
