@@ -1,8 +1,6 @@
 module FInal2_1(
 	input [3:0] A,
 	input [3:0] B,
-	//input clock,
-	//input reset,
 	output [6:0] H1,
 	output [6:0] H2,
 	output [6:0] H3,
@@ -11,10 +9,6 @@ module FInal2_1(
 	output [6:0] H6,
 	input clock,
 	input reset 
-	//input updown, 
-	//input sresetn, 
-	//output reg [3:0] count
-
 );
 //Seven Segment Display Variables
 reg [6:0] H;
@@ -209,28 +203,18 @@ begin
 	end
 	if(count == 8'd3)
 	begin
-		/*casex ({x2,x1,x0})
-		3'b111 : 
-		3'b0xx : 
-		3'bx0x : 
-		3'bxx0 : 
-		endcase*/
+		casex ({x2,x1,x0})
+		3'b111 : H = 7'h06, I = 7'h06, J = 7'h06, K = 7'h06, L = 7'h06, M = 7'h06;
+		3'b0xx : H = 7'h40, I = 7'h40, J = 7'h40, K = 7'h40, L = 7'h40, M = 7'h40;
+		3'bx0x : H = 7'h40, I = 7'h40, J = 7'h40, K = 7'h40, L = 7'h40, M = 7'h40;
+		3'bxx0 : H = 7'h40, I = 7'h40, J = 7'h40, K = 7'h40, L = 7'h40, M = 7'h40;
+		endcase
 	end
 end
 
 always @(negedge reset, posedge clock) 
 begin
 
-	/*casex ({InputSum})
-	5'b00000 : C = 1'b0;
-	5'bxxxx1 : C = 1'b1;
-	5'bxxx1x : C = 1'b1;
-	5'bxx1xx : C = 1'b1;
-	5'bx1xxx : C = 1'b1;
-	5'b1xxxx : C = 1'b1;
-	default : C = 1'b0;
-	endcase*/
-	
 	if (!reset) 
 	begin
 		count <= 8'd0;
@@ -250,83 +234,7 @@ begin
 			count <= count + 1'b1;
 		end
 	end 
-	/*else 
-	begin  //
-		if (count == 8'd0) 
-		begin //
-			count <= 8'd3;
-		end 
-		else 
-		begin
-			count <= count - 1'b1;
-		end
-	end*/
-end
-
-/*always@(*)
-begin
-
-	casex ({InputSum})
-	5'b00000 : C = 1'b0;
-	5'bxxxx1 : C = 1'b1;
-	5'bxxx1x : C = 1'b1;
-	5'bxx1xx : C = 1'b1;
-	5'bx1xxx : C = 1'b1;
-	5'b1xxxx : C = 1'b1;
-	default : C = 1'b0;
-	endcase
 	
-	if(count == 8'd0)
-	begin
-		casex ({A,B})
-		8'b00101000 : x2 = 1'b1; //"28"
-		8'bxxxxxxx1 : x2 = 1'b0;
-		8'bxxxxxx1x : x2 = 1'b0;
-		8'bxxxxx1xx : x2 = 1'b0;
-		8'bxxxx0xxx : x2 = 1'b0;
-		8'bxxx1xxxx : x2 = 1'b0;
-		8'bxx0xxxxx : x2 = 1'b0;
-		8'bx1xxxxxx : x2 = 1'b0;
-		8'b1xxxxxxx : x2 = 1'b0;
-		endcase
-	end 
-	if(count == 8'd1)
-	begin
-		casex ({A,B})
-		8'b00011001 : x1 = 1'b1; //"19"
-		8'bxxxxxxx0 : x1 = 1'b0;
-		8'bxxxxxx1x : x1 = 1'b0;
-		8'bxxxxx1xx : x1 = 1'b0;
-		8'bxxxx0xxx : x1 = 1'b0;
-		8'bxxx0xxxx : x1 = 1'b0;
-		8'bxx1xxxxx : x1 = 1'b0;
-		8'bx1xxxxxx : x1 = 1'b0;
-		8'b1xxxxxxx : x1 = 1'b0;
-		endcase
-	end
-	if(count == 8'd2)
-	begin
-		casex ({A,B})
-		8'b10010110 : x0 = 1'b1; //"96"
-		8'bxxxxxxx1 : x0 = 1'b0;
-		8'bxxxxxx0x : x0 = 1'b0;
-		8'bxxxxx0xx : x0 = 1'b0;
-		8'bxxxx1xxx : x0 = 1'b0;
-		8'bxxx0xxxx : x0 = 1'b0;
-		8'bxx1xxxxx : x0 = 1'b0;
-		8'bx1xxxxxx : x0 = 1'b0;
-		8'b0xxxxxxx : x0 = 1'b0;
-		endcase
-	end
-	if(count == 8'd3)
-	begin
-		casex ({x2,x1,x0})
-		/*3'b111 : 
-		3'b0xx : 
-		3'bx0x : 
-		3'bxx0 : */
-		/*endcase
-	end
-end*/
+end
 	
 endmodule
