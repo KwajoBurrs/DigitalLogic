@@ -26,7 +26,6 @@ assign H6 = ~M;
 
 //State Machine Variables
 reg [3:0] count;
-//reg [3:0] count2;
 reg C;
 wire [4:0] InputSum;
 assign InputSum = A + B;
@@ -36,13 +35,15 @@ reg x0;
 reg x1;
 reg x2;
 
+
 always@(*)
 begin
 
-
+	//---------------begin input comprehension---------------------------
 	reg Z;
 	reg ZZ;
 	reg ZZZ;
+	// begin determining if both inputs are between 0 and 9
 	if (A > 4'h9)
 	begin
 		Z <= 1'b0;
@@ -60,14 +61,7 @@ begin
 	begin
 	ZZZ <= 1'b1;
 	end
-	if (Z & ZZ & ZZZ)
-		begin
-			C <= 1'b1;
-		end
-	else
-	begin
-		C <= 1'b0;
-	end
+	//begin determining if the input is "0,0"-------if "0,0" reset state machine
 	casex ({InputSum})
 	5'b00000 : ZZ = 1'b0;
 	5'bxxxx1 : ZZ = 1'b1;
@@ -77,8 +71,20 @@ begin
 	5'b1xxxx : ZZ = 1'b1;
 	default : ZZ = 1'b0;
 	endcase
+	//----begin if both inputs are between 0 and 9 and the input is not "0,0" then the input into the state machine "C" should be a "1"
+	if (Z & ZZ & ZZZ)
+		begin
+			C <= 1'b1;
 
-	if(count == 8'd0)
+	
+	end
+	else
+	begin
+		C <= 1'b0;
+	end
+	
+
+	if(count == 8'd0)//----------------- 1st State ----------------------------------
 	begin
 		case (A)//seven segment display 1
 		4'h0  : begin H = 7'h3F;J = 7'h00; K = 7'h00; L = 7'h00; M = 7'h00;end
@@ -119,7 +125,7 @@ begin
 		default : I = 7'h00;
 		endcase
 		casex ({A,B})
-		8'b00101000 : x2 = 1'b1; //"28"
+		8'b00101000 : x2 = 1'b1; //correct input at 1st state "28"
 		8'bxxxxxxx1 : x2 = 1'b0;
 		8'bxxxxxx1x : x2 = 1'b0;
 		8'bxxxxx1xx : x2 = 1'b0;
@@ -131,7 +137,7 @@ begin
 		endcase
 	
 	end 
-	if(count == 8'd1)
+	if(count == 8'd1)//----------------- 2nd State ----------------------------------
 	begin
 		case (A)//seven segment display 3
 		4'h0  : begin H = 7'h40; I = 7'h40;J = 7'h3F;L = 7'h00; M = 7'h00;end
@@ -172,7 +178,7 @@ begin
 		default : K = 7'h00;
 		endcase
 		casex ({A,B})
-		8'b00011001 : x1 = 1'b1; //"19"
+		8'b00011001 : x1 = 1'b1; //correct input at 2nd state "19"
 		8'bxxxxxxx0 : x1 = 1'b0;
 		8'bxxxxxx1x : x1 = 1'b0;
 		8'bxxxxx1xx : x1 = 1'b0;
@@ -184,7 +190,7 @@ begin
 		endcase
 	
 	end
-	if(count == 8'd2)
+	if(count == 8'd2)//----------------- 3rd State ----------------------------------
 	begin
 		case (A)//seven segment display 3
 		4'h0  : begin H = 7'h40; I = 7'h40;J = 7'h40;K = 7'h40;L = 7'h3F;end
@@ -225,7 +231,7 @@ begin
 		default : M = 7'h00;
 		endcase
 		casex ({A,B})
-		8'b10010110 : x0 = 1'b1; //"96"
+		8'b10010110 : x0 = 1'b1; //correct input at 3rd state "96"
 		8'bxxxxxxx1 : x0 = 1'b0;
 		8'bxxxxxx0x : x0 = 1'b0;
 		8'bxxxxx0xx : x0 = 1'b0;
@@ -236,17 +242,18 @@ begin
 		8'b0xxxxxxx : x0 = 1'b0;
 		endcase
 	end
-	if(count == 8'd3)
+	if(count == 8'd3)//----------------- 4th State ----------------------------------
 	begin
 		casex ({x2,x1,x0})
-		3'b111 : begin H = 7'h06; I = 7'h06; J = 7'h06; K = 7'h06; L = 7'h06; M = 7'h06; end
-		3'b0xx : begin H = 7'h40; I = 7'h40; J = 7'h40; K = 7'h40; L = 7'h40; M = 7'h40; end
+		3'b111 : begin H = 7'h06; I = 7'h06; J = 7'h06; K = 7'h06; L = 7'h06; M = 7'h06; end// if all states have correct input output all ones
+		3'b0xx : begin H = 7'h40; I = 7'h40; J = 7'h40; K = 7'h40; L = 7'h40; M = 7'h40; end// else output dashes
 		3'bx0x : begin H = 7'h40; I = 7'h40; J = 7'h40; K = 7'h40; L = 7'h40; M = 7'h40; end
 		3'bxx0 : begin H = 7'h40; I = 7'h40; J = 7'h40; K = 7'h40; L = 7'h40; M = 7'h40; end
 		endcase
 	end
 
 end
+//--------------------------begin state machine-----------------------------
 
 always @(negedge reset, posedge clock) 
 begin
